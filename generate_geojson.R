@@ -12,7 +12,7 @@ options(tigris_use_cache = TRUE)
 all_states <- states(cb = T, resolution = "20m") |> 
   as.data.table()
 
-all_states_df <- all_states[, .(state_fp = GEOID, Name = NAME, Abbrv = STUSPS)] |> 
+all_states_df <- all_states[, .(state_geoid = GEOID, name = NAME, abbrv = STUSPS)] |> 
   as.data.frame()
 row.names(all_states_df) <- gsub("^", "ID", row.names(all_states_df))
 
@@ -33,7 +33,7 @@ all_counties <- do.call(
 ) |> 
   as.data.table()
 
-all_counties_df <- all_counties[, .(GEOID, Name = NAME, state_fp = STATEFP)] |>
+all_counties_df <- all_counties[, .(county_geoid = GEOID, name = NAME, state_geoid = STATEFP)] |>
   as.data.frame()
 row.names(all_counties_df) <- gsub("^", "ID", row.names(all_counties_df))
 
