@@ -38,11 +38,12 @@ all_counties_df <- all_counties[, .(county_geoid = GEOID, county_name = NAME, st
     all_states[, .(state_geoid = GEOID, state_name = NAME)],
     by = "state_geoid"
   ) |>
+  setorder(county_geoid) |>
   as.data.frame()
 row.names(all_counties_df) <- gsub("^", "ID", row.names(all_counties_df))
 
 file_conn <- file("topojson/counties.json")
-all_counties[, geometry] |> 
+all_counties[order(GEOID)][, geometry] |> 
   as_Spatial() |> 
   SpatialPolygonsDataFrame(data = all_counties_df) |>
   geojson_json() |>
