@@ -13,11 +13,12 @@ all_states <- states(cb = T, resolution = "20m") |>
   as.data.table()
 
 all_states_df <- all_states[, .(state_geoid = GEOID, state_name = NAME, abbrv = STUSPS)] |> 
+  setorder(state_geoid) |>
   as.data.frame()
 row.names(all_states_df) <- gsub("^", "ID", row.names(all_states_df))
 
 file_conn <- file("topojson/states.json")
-all_states[, geometry] |> 
+all_states[order(GEOID)][, geometry] |> 
   as_Spatial() |> 
   SpatialPolygonsDataFrame(data = all_states_df) |>
   geojson_json() |>
